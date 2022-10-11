@@ -1,21 +1,23 @@
 <template>
-  <main>
-    <section>User details</section>
-    <section>
-      <div>
-        <img :src="userInfo.avatar" />
+  <main class="flex flex-col w-full justify-center items-center">
+    <section class="text-xl pb-5">User details</section>
+    <section class="flex flex-col items-center p-5 border">
+      <div class="pb-3">
+        <Components_avatar :avatar="userInfo.avatar" />
       </div>
       <div>email: {{ userInfo.email }}</div>
-      <div>first Name : {{ userInfo.first_name }}</div>
-      <div>last name: {{ userInfo.last_name }}</div>
+      <div>First Name : {{ userInfo.first_name }}</div>
+      <div>Last name: {{ userInfo.last_name }}</div>
     </section>
   </main>
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
+import Components_avatar from "@/components/avatar";
 
 export default {
   name: "page_user_details",
+  components: { Components_avatar },
   data() {
     return {
       userInfo: {},

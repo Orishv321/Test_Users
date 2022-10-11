@@ -1,9 +1,14 @@
 <template>
-  <div>
-    <div>Users</div>
-    <section>
+  <div class="w-full">
+    <div class="flex justify-center pb-5 text-xl">Users</div>
+    <section class="flex justify-between content-center pb-5">
+      <div class="text-xl">AllUsers</div>
       <div>
-        <select v-model="sortBy">
+        <select
+          v-model="sortBy"
+          aria-label=".form-select-sm example"
+          class="bg-gray-400 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        >
           <option
             v-for="(sort, key) in sortArray"
             :key="key"
@@ -13,25 +18,31 @@
           </option>
         </select>
       </div>
-      <div>AllUsers</div>
     </section>
     <section>
-      <div v-if="!!displayData">
+      <div
+        v-if="!!displayData"
+        class="flex space-x-5 space-y-5 w-full flex-wrap items-center justify-center"
+      >
         <div v-for="(user, key) in displayData" :key="key">
-          <div>
-            <img :src="user.avatar" @click="getUserDetails(user.id)" />
-          </div>
-          <div>email: {{ user.email }}</div>
-          <div>name : {{ user.first_name }} {{ user.last_name }}</div>
+          <Card :user="user" />
         </div>
       </div>
-      <div v-else>Lodding ....</div>
+      <div v-else class="flex w-full justify-center items-center">
+        <div class="loader">
+          <div class="loader-wheel"></div>
+          <div class="loader-text"></div>
+        </div>
+      </div>
     </section>
   </div>
 </template>
 <script>
+import Card from "@/components/Card";
+
 export default {
   name: "page_home",
+  components: { Card },
   data() {
     return {
       users: null,
@@ -40,7 +51,7 @@ export default {
         { label: "First Name", value: "firstName" },
         { label: "Last Name", value: "lastName" },
       ],
-      sortBy: "lastName",
+      sortBy: "none",
       displayData: null,
     };
   },
@@ -54,8 +65,9 @@ export default {
   methods: {
     async getAllUsers() {
       try {
-        let res = await // await fetch("https://reqres.in/api/users?delay=3");
-        (await fetch("https://reqres.in/api/users")).json();
+        let res = await (
+          await fetch("https://reqres.in/api/users?delay=3")
+        ).json();
         // res = await res.json();
         this.users = res.data;
       } catch (e) {
@@ -90,10 +102,55 @@ export default {
         console.error("Could not sort user", e);
       }
     },
-    async getUserDetails(id) {
-      this.$store.dispatch("getUserDetails", id);
-      this.$router.push("/detail/" + id);
-    },
   },
 };
 </script>
+<style scoped>
+.loader {
+  width: 60px;
+}
+
+.loader-wheel {
+  animation: spin 1s infinite linear;
+  border: 2px solid rgba(30, 30, 30, 0.5);
+  border-left: 4px solid #fff;
+  border-radius: 50%;
+  height: 50px;
+  margin-bottom: 10px;
+  width: 50px;
+}
+
+.loader-text {
+  color: #fff;
+  font-family: arial, sans-serif;
+}
+
+.loader-text:after {
+  content: "Loading";
+  animation: load 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load {
+  0% {
+    content: "Loading";
+  }
+  33% {
+    content: "Loading.";
+  }
+  67% {
+    content: "Loading..";
+  }
+  100% {
+    content: "Loading...";
+  }
+}
+</style>
