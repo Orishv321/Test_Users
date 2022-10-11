@@ -1,7 +1,9 @@
 <template>
   <main class="flex flex-col w-full justify-center items-center">
     <section class="text-xl pb-5">{{ userInfo.first_name }}</section>
-    <section class="flex flex-col items-center p-5 border">
+    <section
+      class="flex flex-col items-center p-5 border rounded-2xl bg-gray-100"
+    >
       <div class="pb-3">
         <Components_avatar :avatar="userInfo.avatar" />
       </div>
